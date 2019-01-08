@@ -1,0 +1,82 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    int n, minofmax=1000000, maxofmin=0, mem, memi1, memi2;
+    const int MaxMatrix=10;
+    int mass[MaxMatrix][MaxMatrix];
+    cout<<"Введите количество строк или столбцов в матрице\n";
+    cin>>n;
+    if(n>10){
+        cout<<"У Матрицы не модет быть больше 10 лементов в строке и столбце\n ";
+    }
+    int mem1=n+1, mem2=n+1;
+    cout<<"Введите вектор, но помните, что элемент не может быть больше чем один миллион\n";
+    for (int i=0; i<(n-1); i++){
+        cin>>mass[i][i+1];
+    }
+    for(int i=0; i<n; i++){
+        cin>>mass[i][i];
+    }
+    for (int i=0; i<(n-1); i++){
+        cin>>mass[i+1][i];
+    }
+    for (int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            cout<<mass[i][j];
+        }
+        cout<<endl;
+    }
+
+    for (int i=0; i<n; i++){
+        for (int j=0; j<n;j++){
+            if(mass[i][j]>mass[i+1][j] && mass[i][j]>mass[i+1][j+1] && mass[i][j]>mass[i][j+1] &&
+            mass[i][j]>mass[i+1][j-1] && mass[i][j]>mass[i][j-1] && mass[i][j]>mass[i-1][j] &&
+            mass[i][j]>mass[i-1][j+1] && mass[i][j]>mass[i-1][j-1]) {
+                if(mass[i][j]<minofmax){
+                    minofmax=mass[i][j];
+                    mem1=j;
+                    memi1=i;
+                }
+            }
+        }
+    }
+    if(mem1==n+1){
+        cout<<"Локального максимального элемента нет.";
+        mem1=n-1;
+    }else{cout<<"Локальный максимальный элемент и индексами i="<<memi1<<"j="<<mem1;}
+
+    for (int i=0; i<n; i++){
+        for (int j=0; j<n;j++){
+            if(mass[i][j]<mass[i+1][j] && mass[i][j]<mass[i+1][j+1] && mass[i][j]<mass[i][j+1] &&
+               mass[i][j]<mass[i+1][j-1] && mass[i][j]<mass[i][j-1] && mass[i][j]<mass[i-1][j] &&
+               mass[i][j]<mass[i-1][j+1] && mass[i][j]<mass[i-1][j-1]) {
+                if(mass[i][j]<maxofmin){
+                    maxofmin=mass[i][j];
+                    mem2=j;
+                    memi2=i;
+                }
+            }
+        }
+    }
+    if(mem2==n+1){
+        cout<<"Локального минимального элемента нет.";
+        mem2=n-1;
+    }else{cout<<"Локальный минимальный элемент и индексами i="<<memi2<<"j="<<mem2;}
+
+    for (int i=0; i<n; i++){
+            mem=mass[i][mem2];
+            mass[i][mem2]=mass[i][mem1];
+            mass[i][mem1]=mem;
+    }
+    cout<<endl;
+    for (int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            cout<<mass[i][j];
+        }
+        cout<<endl;
+    }
+
+    return 0;
+}
